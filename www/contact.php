@@ -69,7 +69,7 @@
 								<a href="index.html">Home</a>
 							</li>
 							<li><a href="about.html">About</a></li>
-							<li class="active"><a href="contact.html">Contact</a></li>
+							<li class="active"><a href="#">Contact</a></li>
 						</ul>
 					</nav>
 				</div>
@@ -116,7 +116,7 @@
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<input type="text" name="email" id="email" class="form-control" placeholder="Email">
+										<input type="email" name="email" id="email" class="form-control" placeholder="Email">
 									</div>
 								</div>
 								<div class="col-md-12">
@@ -137,6 +137,7 @@
 			</div>
 		</div>
 		<?php
+			ob_start();
 			use PHPMailer\PHPMailer\PHPMailer;
 			use PHPMailer\PHPMailer\Exception;
 			require 'PHPMailer-master/src/Exception.php';
@@ -146,7 +147,7 @@
 			$mail = new PHPMailer();
 			$mail->IsSMTP();
 			$mail->Mailer = "smtp";
-
+        	$sent = 0;
 			$mail->SMTPDebug  = 1;  
 			$mail->SMTPAuth   = TRUE;
 			$mail->SMTPSecure = "tls";
@@ -154,7 +155,7 @@
 			$mail->Host       = "smtp.gmail.com";
 			$mail->Username   = "hannah13200@gmail.com";
 			$mail->Password   = "hzwyscqvlnuuftfi";
-			ob_start();
+			
 			$mail->IsHTML(true);
 			$mail->AddAddress("advikabhat3@gmail.com", "Advika");
 			$mail->SetFrom("hannah13200@gmail.com", "hannah");
@@ -163,19 +164,26 @@
 			$mail->Subject = "Mathru message From ".$_POST["name"];
        		$content = "<strong>Name:</strong> ".$_POST["name"]."<br><br><strong>Message: </strong>".$_POST["msg"]."<br><br><strong>Email:</strong> ".$_POST["email"];
 
-        if (isset($_POST["SubmitBtn"]) && $_POST['msg']!="") {
-	        
+        if (isset($_POST["SubmitBtn"]) && $_POST['msg'] != "") {
+	        $sent = 0;
 	        $mail->MsgHTML($content);
 	        if (!$mail->Send()) {
-		        echo "Error while sending Email.";
+		        $sent = 0;
 		        var_dump($mail);
 	        } else {
-		        echo "Email sent successfully";
+		        $sent = 1;
 		        $_POST['msg'] = "";
 	        }
-			
         }
-		ob_end_clean();
+			ob_end_clean();
+
+			if($sent)
+				echo "<script>alert(\"Email sent successfully\")</script>";
+			else
+				echo "<script>alert(\"Err sending message\")</script>";
+			
+        
+		
         ?>
 		
 		<footer>
