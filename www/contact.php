@@ -126,7 +126,7 @@
 								</div>
 								<div class="col-md-12">
 									<div class="form-group">
-										<input type="submit" name="SubmitBtn" id="SubmitBtn" value="Send Message" class="btn btn-primary">
+										<input type="submit" name="SubmitBtn" id="SubmitBtn" value="Send Message" class="btn btn-primary" onClick="myFunction()">
 									</div>
 								</div>
 							</div>
@@ -136,6 +136,7 @@
 				</form>
 			</div>
 		</div>
+		
 		<?php
 			ob_start();
 			use PHPMailer\PHPMailer\PHPMailer;
@@ -170,21 +171,26 @@
 	        if (!$mail->Send()) {
 		        $sent = 0;
 		        var_dump($mail);
+				echo "<script>alert(\"Email sent successfully\")</script>";
 	        } else {
 		        $sent = 1;
 		        $_POST['msg'] = "";
+				echo "<script>alert(\"Err sending message\")</script>";
 	        }
         }
 			ob_end_clean();
 
-			if($sent)
-				echo "<script>alert(\"Email sent successfully\")</script>";
-			else
-				echo "<script>alert(\"Err sending message\")</script>";
+				
+				
 			
-        
-		
         ?>
+		<script>
+			function myFunction() {
+				var x = document.getElementById("snackbar");
+				x.className = "show";
+				setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+			}
+		</script>
 		
 		<footer>
 			<div id="footer">
